@@ -13,7 +13,7 @@ import pandas as pd
 
 
 def main(clip_model_type: str):
-    # device = torch.device('cuda:0')
+    device = torch.device('cuda:0')
     clip_model_name = clip_model_type.replace('/', '_')
     out_path = f"./data/clotho/oscar_split_{clip_model_name}_train.pkl"
     clip_model, preprocess = clip.load(clip_model_type, jit=False)
@@ -46,8 +46,8 @@ def main(clip_model_type: str):
             print('ERROR IN:', filename)
         logmel = logmel.astype(np.uint8)
         # image = io.imread(logmel)
-        # image = preprocess(Image.fromarray(image)).unsqueeze(0).to(device)
-        image = preprocess(Image.fromarray(logmel)).unsqueeze(0)
+        image = preprocess(Image.fromarray(image)).unsqueeze(0).to(device)
+        # image = preprocess(Image.fromarray(logmel)).unsqueeze(0)
         with torch.no_grad():
             prefix = clip_model.encode_image(image).cpu()
         data["clip_embedding"] = index
