@@ -11,7 +11,7 @@ In our work, we use the [CLIP](https://github.com/openai/CLIP) model, which was 
 [comment]: <> (Dependencies can be found at the [Inference notebook]&#40;https://colab.research.google.com/drive/1tuoAC5F4sC7qid56Z0ap-stR3rwdk0ZV?usp=sharing&#41; )
 Clone, create environment and install dependencies:  
 ```
-git clone https://github.com/rmokady/CLIP_prefix_caption && cd CLIP_prefix_caption
+git clone https://github.com/anushkajj/ClipAudioCaption.git && cd ClipAudioCaption
 conda env create -f environment.yml
 conda activate clip_prefix_caption
 ```
