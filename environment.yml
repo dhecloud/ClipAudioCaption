@@ -11,3 +11,5 @@ dependencies:
    - regex
    - tqdm
    - git+https://github.com/openai/CLIP.git
+   - librosa
+   - pandas

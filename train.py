@@ -57,8 +57,8 @@ class ClipCocoDataset(Dataset):
         sys.stdout.flush()
         self.prefixes = all_data["clip_embedding"]
         captions_raw = all_data["captions"]
-        self.image_ids = [caption["image_id"] for caption in captions_raw]
-        self.captions = [caption['caption'] for caption in captions_raw]
+        self.image_ids = [caption["file_name"] for caption in captions_raw]
+        self.captions = [caption['caption_1'] for caption in captions_raw]
         if os.path.isfile(f"{data_path[:-4]}_tokens.pkl"):
             with open(f"{data_path[:-4]}_tokens.pkl", 'rb') as f:
                 self.captions_tokens, self.caption2embedding, self.max_seq_len = pickle.load(f)
@@ -67,7 +67,7 @@ class ClipCocoDataset(Dataset):
             self.caption2embedding = []
             max_seq_len = 0
             for caption in captions_raw:
-                self.captions_tokens.append(torch.tensor(self.tokenizer.encode(caption['caption']), dtype=torch.int64))
+                self.captions_tokens.append(torch.tensor(self.tokenizer.encode(caption['caption_1']), dtype=torch.int64))
                 self.caption2embedding.append(caption["clip_embedding"])
                 max_seq_len = max(max_seq_len, self.captions_tokens[-1].shape[0])
             # self.max_seq_len = max_seq_len
@@ -291,12 +291,16 @@ def load_model(config_path: str, epoch_or_latest: Union[str, int] = '_latest'):
 def train(dataset: ClipCocoDataset, model: ClipCaptionModel, args,
           lr: float = 2e-5, warmup_steps: int = 5000, output_dir: str = ".", output_prefix: str = ""):
 
-    device = torch.device('cuda:0')
+    #device = torch.device('cuda:0')
+    # device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = 'cpu'
     batch_size = args.bs
     epochs = args.epochs
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     model = model.to(device)
+    PATH = 'model_weights.pt'
+    model.load_state_dict(torch.load(PATH, map_location=torch.device('cpu'))) #added for finetuning
     model.train()
     optimizer = AdamW(model.parameters(), lr=lr)
     train_dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True, drop_last=True)
