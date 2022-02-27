@@ -16,70 +16,21 @@ conda env create -f environment.yml
 conda activate clip_prefix_caption
 ```
 
-## COCO training
+## Clotho training
 
-Download [train_captions](https://drive.google.com/file/d/1D3EzUK1d1lNhD2hAvRiKPThidiVbP2K_/view?usp=sharing) to `data/coco/annotations`.
+Download [train_audio and captions](https://zenodo.org/record/3490684#.Yhtnve5Bw-Q) to `data`.
 
-Download [training images](http://images.cocodataset.org/zips/train2014.zip) and [validation images](http://images.cocodataset.org/zips/val2014.zip) and unzip (We use Karpathy et el. split).
-
-Extract CLIP features using (output is `data/coco/oscar_split_ViT-B_32_train.pkl`):
+Download model weights
 ```
-python parse_coco.py --clip_model_type ViT-B/32
+gdown --id 14pXWwB4Zm82rsDdvbGguLfx9F8aM7ovT -O model_wieghts.pt to root directory
 ```
-Train with fine-tuning of GPT2:
+Extract CLIP features using (output is `data/clotho/oscar_split_ViT-B_32_train.pkl`):
 ```
-python train.py --data ./data/coco/oscar_split_ViT-B_32_train.pkl --out_dir ./coco_train/
+python parse_clotho.py --clip_model_type ViT-B/32 --caption_path ./data/clotho_captions_development.csv --audio_path ./data/development
 ```
-
-Train only transformer mapping network:
+Train with fine-tuning of GPT2
 ```
-python train.py --only_prefix --data ./data/coco/oscar_split_ViT-B_32_train.pkl --out_dir ./coco_train/ --mapping_type transformer  --num_layres 8 --prefix_length 40 --prefix_length_clip 40
-```
-
-**If you wish to use ResNet-based CLIP:** 
+python train.py --data ./data/clotho/oscar_split_ViT-B_32_train.pkl --out_dir ./clotho_train/
 
 ```
-python parse_coco.py --clip_model_type RN50x4
-```
-```
-python train.py --only_prefix --data ./data/coco/oscar_split_RN50x4_train.pkl --out_dir ./coco_train/ --mapping_type transformer  --num_layres 8 --prefix_length 40 --prefix_length_clip 40 --is_rn
-```
-
-## Conceptual training
-
-Download the .TSV train/val files from [Conceptual Captions](https://ai.google.com/research/ConceptualCaptions/download) and place them under <data_root> directory.
-
-Download the images and extract CLIP features using (outputs are `<data_root>/conceptual_clip_ViT-B_32_train.pkl` and  `<data_root>/conceptual_clip_ViT-B_32_val.pkl`):
-```
-python parse_conceptual.py --clip_model_type ViT-B/32 --data_root <data_root> --num_threads 16
-```
-Notice, downloading the images might take a few days.
-
-Train with fine-tuning of GPT2:
-```
-python train.py --data <data_root>/conceptual_clip_ViT-B_32_train.pkl --out_dir ./conceptual_train/
-```
-Similarly to the COCO training, you can train a transformer mapping network, and / or parse the images using a ResNet-based CLIP. 
-
-## Citation
-If you use this code for your research, please cite:
-```
-@article{mokady2021clipcap,
-  title={ClipCap: CLIP Prefix for Image Captioning},
-  author={Mokady, Ron and Hertz, Amir and Bermano, Amit H},
-  journal={arXiv preprint arXiv:2111.09734},
-  year={2021}
-}
-```
-
-
-
-
-## Acknowledgments
-This repository is heavily based on [CLIP](https://github.com/openai/CLIP) and [Hugging-faces](https://github.com/huggingface/transformers) repositories.
-For training we used the data of [COCO dataset](https://cocodataset.org/#home) and [Conceptual Captions](https://ai.google.com/research/ConceptualCaptions/).
-
-## Contact
-For any inquiry please contact us at our email addresses: ron.mokady@gmail.com or amirhertz@mail.tau.ac.il.
-
 
