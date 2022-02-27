@@ -20,9 +20,9 @@ conda activate clip_prefix_caption
 
 Download [train_audio and captions](https://zenodo.org/record/3490684#.Yhtnve5Bw-Q) to `data`.
 
-Download model weights
+Download model weights to root directory
 ```
-gdown --id 14pXWwB4Zm82rsDdvbGguLfx9F8aM7ovT -O model_wieghts.pt to root directory
+gdown --id 14pXWwB4Zm82rsDdvbGguLfx9F8aM7ovT -O model_wieghts.pt 
 ```
 Extract CLIP features using (output is `data/clotho/oscar_split_ViT-B_32_train.pkl`):
 ```
