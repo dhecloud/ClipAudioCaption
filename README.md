@@ -26,7 +26,7 @@ gdown --id 14pXWwB4Zm82rsDdvbGguLfx9F8aM7ovT -O model_wieghts.pt
 ```
 Extract CLIP features using (output is `data/clotho/oscar_split_ViT-B_32_train.pkl`):
 ```
-python parse_clotho.py --clip_model_type ViT-B/32 --caption_path ./data/clotho_captions_development.csv --audio_path ./data/development
+python parse_clotho.py --clip_model_type ViT-B/32 --captions_path ./data/clotho_captions_development.csv --audio_path ./data/development
 ```
 Train with fine-tuning of GPT2
 ```
